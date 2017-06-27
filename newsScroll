@@ -1,0 +1,59 @@
+/*
+ * 这个一个新闻滚动的jQuery扩展函数（2.+）
+ * 使用方式 $(ele).newScroll([moveHeight,limitNum,scrollTime]);
+ * 三个参数分别控制滚动步长，滚动所需的最少个数，滚动时长；
+ */
+$.fn.newsScroll = function(options){
+	var defaults = {
+			moveHeight:67,
+			limitNum: 5,
+			scrollTime: 1500
+	}
+	if(!options){
+		options = {};
+	}
+	return $(this).each(function(){
+		var $obj = $(this);
+		var carousel,inter=1,sum;
+		var objlength = $(this).find("li").length;
+		var limitNum = options.limitNum?options.limitNum:defaults.limitNum;
+		var moveHeight = options.moveHeight?options.moveHeight:defaults.moveHeight;
+		var scrollTime = options.scrollTime?options.scrollTime:defaults.scrollTime;
+	    if(objlength > limitNum){
+		    $obj.children("li").each(function(){
+		    	if($(this).index()<limitNum){
+		    		$obj.append($(this).clone());
+		    	}
+		    });
+	  	    carousel = setInterval(function(){
+	  	    	if(inter < objlength){
+		  			$obj.children("li").animate({"top":(-moveHeight*inter)+"px"});
+		  		}else{
+		  			$obj.children("li").animate({"top":(-moveHeight*inter)+"px"},function(){
+		  				$obj.children("li").css({"top":"0px"});
+		  			});
+		  			inter=0;
+		  		}
+	  	    	inter++;
+	  	    },scrollTime);
+	    }
+  	    $obj.on("mouseenter",function(){
+  	    	clearInterval(carousel);
+  	    })
+  	    $obj.on("mouseleave",function(){
+  	    	if(objlength > limitNum){
+	  	    	carousel = setInterval(function(){
+		  	    	if(inter < objlength){
+			  			$obj.children("li").animate({"top":(-moveHeight*inter)+"px"});
+			  		}else{
+			  			$obj.children("li").animate({"top":(-moveHeight*inter)+"px"},function(){
+			  				$obj.children("li").css({"top":"0px"});
+			  			});
+			  			inter=0;
+			  		}
+		  	    	inter++;
+		  	    },scrollTime);
+  	    	}
+  	    })
+	})
+};
