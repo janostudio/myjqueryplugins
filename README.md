@@ -7,3 +7,9 @@ useful js or jquery plugins written in my work.
 * newsScroll
 
 A plugin just for scroll news list.
+
+## 2. scrollUnique
+
+* scrollUnique
+
+A plugin for stop bubbling.
