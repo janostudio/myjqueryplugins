@@ -1,0 +1,33 @@
+/*
+ * 对fileinput插件的补充,附件旋转功能
+ */
+function grotater(){
+	var xh = $(".file-zoom-content").css("height");
+	var mt = $(".file-zoom-detail").css("width") > xh ? "60px":"0px";
+	var el = document.getElementsByClassName("file-zoom-detail");
+	var st = window.getComputedStyle(el[0], null);
+	var tr = st.getPropertyValue("-webkit-transform") ||
+	    st.getPropertyValue("-moz-transform") ||
+	    st.getPropertyValue("-ms-transform") ||
+	    st.getPropertyValue("-o-transform") ||
+	    st.getPropertyValue("transform") ||
+	    "FAIL";
+	if(tr !== "none"){
+		var values = tr.split('(')[1].split(')')[0].split(',');
+		var a = values[0];
+		var b = values[1];
+		var c = values[2];
+		var d = values[3];
+		var scale = Math.sqrt(a * a + b * b);
+		var sin = b / scale;
+		var angle = Math.round(Math.atan2(b, a) * (180 / Math.PI));
+		if((angle+90)/90%2 === 0 ){
+			$(".file-zoom-detail").css({"margin-top": "0px","max-width":"100%","transform":"rotate("+(angle+90)+"deg)"});
+		}else{
+			$(".file-zoom-detail").css({"margin-top": mt,"max-width":xh,"transform":"rotate("+(angle+90)+"deg)"});
+		}
+		
+	}else{
+		$(".file-zoom-detail").css({"margin-top": mt,"max-width":xh,"transform":"rotate(90deg)"});
+	}
+}
