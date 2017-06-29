@@ -13,3 +13,9 @@ A plugin just for scroll news list.
 * scrollUnique
 
 A plugin for stop bubbling.
+
+## 3. announceInfo
+
+* announceInfo
+
+A plugin for quickly insert annoucement infomation and to be convenient maintenance
