@@ -9,19 +9,20 @@ $.fn.limitLength = function(options){
 	if(!options){
 		options = {};
 	}
-	return (function(that){
+	return $(this).each(function(){
+		var that = this;
 		var charlength = options.charlength?options.charlength:defaults.charlength;
 		$(that).on("input",resetNum.bind(that));
 		resetNum();
 		function resetNum(){
 			var nowlength = $(that).val().length;
 			if( nowlength <= charlength){
-				var str = '<p style="text-align:right;"><span>'+nowlength+'</span>/'+charlength+'</p>';
+				var str = '<p style="text-align:right;margin-bottom:-6px;"><span>'+nowlength+'</span>/'+charlength+'</p>';
 			}else{
-				var str = '<p style="text-align:right;color:#e6454a;">已达到字数上线。 '+charlength+'</span>/'+charlength+'</p>';
+				var str = '<p style="text-align:right;color:#e6454a;margin-bottom:-6px;">已达到字数上线。 '+charlength+'</span>/'+charlength+'</p>';
 				$(that).val($(that).val().substring(0, charlength));
 			}
 			$(that).next().remove().end().after(str);
 		}
-	})(this)
+	});
 }
