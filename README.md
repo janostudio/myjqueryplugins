@@ -25,3 +25,9 @@ A plugin for quickly insert annoucement infomation and to be convenient maintena
 * rotate2d
 
 A function for rotate photo(learn matrix with translate scale rotate and skew).
+
+## 5. limitLength
+
+* limitLength
+
+A plugin for limiting textarea's value length.
