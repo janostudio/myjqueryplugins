@@ -1,0 +1,27 @@
+/*
+ * 限制textarea最大字数，且在右下角显示字数
+ * 使用方法 $("selector").limitLength({charlength:250}); 
+ */
+$.fn.limitLength = function(options){
+	var defaults = {
+		charlength: 250
+	}
+	if(!options){
+		options = {};
+	}
+	return (function(that){
+		var charlength = options.charlength?options.charlength:defaults.charlength;
+		$(that).on("input",resetNum.bind(that));
+		resetNum();
+		function resetNum(){
+			var nowlength = $(that).val().length;
+			if( nowlength <= charlength){
+				var str = '<p style="text-align:right;"><span>'+nowlength+'</span>/'+charlength+'</p>';
+			}else{
+				var str = '<p style="text-align:right;color:#e6454a;">已达到字数上线。 '+charlength+'</span>/'+charlength+'</p>';
+				$(that).val($(that).val().substring(0, charlength));
+			}
+			$(that).next().remove().end().after(str);
+		}
+	})(this)
+}
