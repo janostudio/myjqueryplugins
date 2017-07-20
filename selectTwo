@@ -1,0 +1,165 @@
+/*
+ * select两级联动插件
+ */
+$.fn.selectTwo = function(options){
+	var defaults = {
+		firstname : "occupation",
+		first : [
+				{name:"在岗职工",value:"1"},
+				{name:"农牧渔民",value:"2"},
+				{name:"解放军、武警",value:"5"},
+				{name:"学生",value:"3"},
+				{name:"离退休人员",value:"4"},
+				{name:"其他人员",value:"6"}
+				],
+		secondname : "suboccupation",
+		second : [
+			[
+				{name:"机关干部岗位",value:"01",
+					children:[
+						{name:"",value:""},
+						{name:"公务员",value:"011"},
+						{name:"参照公务员法管理的工作人员",value:"012"}
+					]
+				},
+				{name:"企事业单位管理、专业技术岗位",value:"02",
+					children:[
+						{name:"事业单位管理岗位",value:"0211"},
+						{name:"事业单位专业技术岗位",value:"0212"},
+						{name:"公有经济控制企业管理岗位",value:"0213"},
+						{name:"公有经济控制企业专业技术岗位",value:"0214"},
+						{name:"非公有经济控制企业管理岗位",value:"0215"},
+						{name:"非公有经济控制企业专业技术岗位",value:"0216"},
+						{name:"民办非企业管理岗位",value:"0217"},
+						{name:"民办非企业专业技术岗位",value:"0218"}
+					]
+				},
+				{name:"公有经济控制单位工勤岗位",value:"0311"},
+				{name:"非公有企业工勤岗位",value:"0312"},
+				{name:"民办非企业工勤岗位",value:"0313"},
+				{name:"机关单位工勤岗位",value:"0314"},
+				{name:"事业单位工勤岗位",value:"0315"}
+			],
+			[
+				{name:"农牧渔业生产人员",value:"11"},
+				{name:"乡村医生",value:"122"},
+				{name:"外出务工经商人员",value:"123"},
+				{name:"其他农牧渔民",value:"124"}
+			],
+			[
+				{name:"研究生",value:"30",
+					children:[
+						{name:"研究生毕业年级学生",value:"301"},
+						{name:"研究生一年级学生",value:"302"},
+						{name:"研究生其他年级学生",value:"303"}
+					]
+				},
+				{name:"大学本科学生",value:"31",
+					children:[
+						{name:"大学本科毕业年级学生",value:"311"},
+						{name:"大学本科一年级学生",value:"312"},
+						{name:"大学本科其他年级学生",value:"313"}
+					]
+				},
+				{name:"大学专科学生",value:"32",
+					children:[
+						{name:"大学专科毕业年级学生",value:"321"},
+						{name:"大学专科一年级学生",value:"322"},
+						{name:"大学专科其他年级学生",value:"323"}
+					]
+				},
+				{name:"中等专业学校学生",value:"33"},
+				{name:"高中学生",value:"34"},
+				{name:"技工学校学生",value:"35"}
+			],
+			[
+				{name:"离休干部",value:"501"},
+				{name:"退休人员",value:"502"},
+				{name:"退职人员",value:"503"},
+				{name:"内部退养职工",value:"504"}
+			],
+			[],
+			[
+				{name:"大学生村官",value:"601"},
+				{name:"社区工作人员",value:"602"},
+				{name:"停薪留职人员",value:"603"},
+				{name:"个体工商户中的从业人员",value:"604"},
+				{name:"自由职业人员",value:"605"},
+				{name:"（转业）待安置、学生毕业未就业的人员",value:"606"},
+				{name:"公派或因私出国、出境逾期未归的人员",value:"607"},
+				{name:"改革后不再保留原机关干部身份，党组织关系仍保留在原单位的人员",value:"608"},
+				{name:"企业破产后，领取保险金或被辞退的职工中未重新就业的人员",value:"609"},
+				{name:"由于各种原因，已经离开本人的生产、工作岗位，并已不在本单位从事其他工作，但仍与单位保留劳动关系的职工（不包括内部退养职工）",value:"610"},
+				{name:"党组织关系在人才（劳动）服务中心，不明职业的人员",value:"611"},
+				{name:"其他从业人员",value:"612"},
+				{name:"其他无业人员",value:"613"}
+			]
+		],
+		ocinit: "",
+		subinit:""
+	}
+	if(!options){
+		options = {};
+	}
+	return (function(that){
+		var str = '';
+		var first = options.first?options.first:defaults.first;
+		var second = options.second?options.second:defaults.second;
+		var firstname = options.firstname?options.firstname:defaults.firstname;
+		var secondname = options.secondname?options.secondname:defaults.secondname;
+		var subinit = options.subinit?options.subinit:defaults.subinit;
+		var ocinit = options.ocinit?options.ocinit:defaults.ocinit;
+	    str += '<div class="col-sm-1" style="width:10%;padding-right:0px;"><select class="form-control" id="'+firstname+'" name="'+firstname+'">';
+		for(i in first){
+			var isselect = '';
+			if( i == 0){
+				isselect = 'selected';
+			}
+			str += '<option value="'+first[i].value+'" '+isselect+'>'+first[i].name+'</option>';
+		}
+		str += '</select></div>';
+		
+		str += generateSec(0);
+		
+		$(that).after(str);
+		
+		$("#"+firstname).on("change",function(){
+			var index = $("#"+firstname).val();
+			var str = generateSec(parseInt(index)-1);
+			$("#"+firstname).parent().next().remove().end().after(str);
+		});
+		
+		// 初始化
+		if(ocinit){
+			$("[name='"+firstname+"']").val(ocinit).trigger("change");
+			$("[name='"+secondname+"']").val(subinit);
+		}
+		
+		function generateSec(num){
+			var str2 = '<div class="col-sm-2" style="width:15%;"><select class="form-control" name="'+secondname+'">';
+			var ss = second[num];
+			if(ss == 0){
+				str2 = '<div class="col-sm-2" style="width:15%;"><select class="form-control" name="'+secondname+'" disabled>';
+			};
+			for (m in ss){
+				var ss2 = ss[m];
+				if(ss2.children){
+					str2 += '<optgroup label="'+ss2.name+'">';
+					var children = ss2.children;
+					for(n in children){
+						var isselect = '';
+						if( m == 0 && n==0){
+							isselect = 'selected';
+						}
+						str2 += '<option value="'+children[n].value+'" '+isselect+'>'+children[n].name+'</option>';
+					}
+					str2 += '</optgroup>';
+				}else{
+					str2 += '<option value="'+ss2.value+'" '+isselect+'>'+ss2.name+'</option>';
+				}
+			}
+			str2 += '</select></div>';
+			return str2;
+		}
+	})(this)
+}
