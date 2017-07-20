@@ -31,3 +31,9 @@ A function for rotate photo(learn matrix with translate scale rotate and skew).
 * limitLength
 
 A plugin for limiting textarea's value length.
+
+## 6. selectTwo
+
+* selectTwo
+
+A plugin for relate two select.
