@@ -1,0 +1,26 @@
+/*
+ * 模态框可以自由拖动
+ * 使用方法 $("selector").(); 
+ */
+$.fn.modalMovable = function(){
+	return $(this).each(function(){
+		var isdragable = false,
+			that = this;
+		$(that).css("cursor","move");
+		$(that).on("mousedown",function(){
+			isdragable = true;
+		});
+		$(that).on("mousemove",function(){
+			if(isdragable){
+				var curleft = $(that).parents(".modal-dialog").css("margin-left"),
+					curtop = $(that).parents(".modal-dialog").css("margin-top"),
+					nowleft = (parseInt(curleft)+event.movementX)>=0?parseInt(curleft)+event.movementX:0,
+					nowtop = (parseInt(curtop)+event.movementY)>=0?parseInt(curtop)+event.movementY:0;
+				$(that).parents(".modal-dialog").css({"margin-left":nowleft,"margin-top":nowtop});
+			}
+		});
+		$(that).on("mouseup",function(){
+			isdragable = false;
+		});
+	});
+}
