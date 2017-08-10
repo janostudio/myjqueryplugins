@@ -37,3 +37,9 @@ A plugin for limiting textarea's value length.
 * selectTwo
 
 A plugin for relate two select.
+
+## 7. modalMovable
+
+* modalMovable
+
+A plugin to move modal.
